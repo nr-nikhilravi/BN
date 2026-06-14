@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maybank Product Catalogue — RM Reference</title>
+<style>
+  :root{
+    --gold:#FFC20E;
+    --gold-deep:#D98E00;
+    --ink:#161310;
+    --ink-2:#3a342d;
+    --muted:#6f685d;
+    --line:#e8e3d8;
+    --bg:#fbfaf6;
+    --card:#ffffff;
+    --chip:#f4f0e6;
+    --chip-line:#e6dfcf;
+    --focus:#1f6feb;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"Segoe UI",-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,system-ui,sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ---------- Header ---------- */
+  .masthead{
+    background:var(--ink);
+    color:#fff;
+    padding:26px 28px 22px;
+    border-bottom:3px solid var(--gold);
+  }
+  .masthead-inner{max-width:1180px;margin:0 auto;}
+  .brand{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;}
+  .wordmark{
+    font-size:30px;font-weight:800;letter-spacing:-.5px;color:var(--gold);
+    display:flex;align-items:center;gap:10px;
+  }
+  .wordmark::before{
+    content:"";width:22px;height:22px;border-radius:50%;
+    background:var(--gold);display:inline-block;
+    box-shadow:0 0 0 4px rgba(255,194,14,.18);
+  }
+  .masthead .sep{color:#544d42;font-weight:300;font-size:22px;}
+  .masthead .role{font-size:15px;font-weight:600;color:#efe7d2;letter-spacing:.2px;}
+  .masthead p.note{
+    margin:12px 0 0;color:#b5ad9d;font-size:13.5px;max-width:760px;
+  }
+  .masthead p.note strong{color:var(--gold);font-weight:700;}
+
+  /* ---------- Controls ---------- */
+  .controls{
+    position:sticky;top:0;z-index:30;
+    background:rgba(251,250,246,.94);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+    padding:14px 28px;
+  }
+  .controls-inner{max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:12px;}
+  .searchrow{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+  .search{
+    flex:1;min-width:240px;position:relative;
+  }
+  .search input{
+    width:100%;padding:11px 14px 11px 40px;font-size:15px;
+    border:1px solid var(--chip-line);border-radius:10px;background:#fff;color:var(--ink);
+    font-family:inherit;
+  }
+  .search input:focus{outline:2px solid var(--focus);outline-offset:1px;border-color:transparent;}
+  .search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted);}
+  .count{font-size:13px;color:var(--muted);white-space:nowrap;}
+  .count b{color:var(--ink);}
+
+  .pills{display:flex;gap:8px;flex-wrap:wrap;}
+  .pill{
+    border:1px solid var(--chip-line);background:#fff;color:var(--ink-2);
+    padding:7px 13px;border-radius:999px;font-size:13px;font-weight:600;cursor:pointer;
+    font-family:inherit;transition:background .15s,color .15s,border-color .15s;
+  }
+  .pill:hover{border-color:var(--gold-deep);}
+  .pill[aria-pressed="true"]{background:var(--ink);color:var(--gold);border-color:var(--ink);}
+  .pill:focus-visible{outline:2px solid var(--focus);outline-offset:2px;}
+
+  /* ---------- Layout ---------- */
+  main{max-width:1180px;margin:0 auto;padding:28px 28px 60px;}
+
+  .cat{margin-top:14px;}
+  .cat-head{
+    display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap;
+    padding:24px 0 14px;border-bottom:2px solid var(--ink);margin-bottom:22px;
+  }
+  .cat-head .idx{
+    font-size:13px;font-weight:800;color:var(--gold-deep);letter-spacing:1.5px;
+    background:var(--chip);padding:4px 9px;border-radius:6px;
+  }
+  .cat-head h2{margin:0;font-size:25px;font-weight:800;letter-spacing:-.3px;}
+  .cat-head .blurb{color:var(--muted);font-size:14px;margin-left:auto;max-width:440px;text-align:right;}
+
+  .group{margin-bottom:30px;}
+  .group > h3{
+    margin:0 0 14px;font-size:14px;font-weight:700;color:var(--ink-2);
+    text-transform:uppercase;letter-spacing:1px;display:flex;align-items:center;gap:10px;
+  }
+  .group > h3::after{content:"";flex:1;height:1px;background:var(--line);}
+
+  .grid{
+    display:grid;gap:16px;
+    grid-template-columns:repeat(auto-fill,minmax(310px,1fr));
+  }
+
+  /* ---------- Card ---------- */
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:12px;
+    border-left:4px solid var(--gold);
+    padding:18px 18px 16px;display:flex;flex-direction:column;gap:10px;
+    transition:box-shadow .18s,transform .18s,border-left-color .18s;
+  }
+  .card:hover{box-shadow:0 10px 26px -14px rgba(40,32,10,.4);transform:translateY(-2px);border-left-color:var(--gold-deep);}
+  .card .eyebrow{font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--gold-deep);}
+  .card h4{margin:0;font-size:17px;font-weight:700;letter-spacing:-.2px;line-height:1.25;}
+  .card .desc{margin:0;font-size:13.5px;color:var(--ink-2);}
+  .card ul{margin:2px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px;}
+  .card ul li{font-size:13px;color:var(--ink-2);padding-left:18px;position:relative;line-height:1.4;}
+  .card ul li::before{
+    content:"";position:absolute;left:0;top:7px;width:7px;height:7px;border-radius:2px;
+    background:var(--gold);transform:rotate(45deg);
+  }
+  .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:4px;}
+  .tag{
+    font-size:11px;font-weight:600;color:var(--ink-2);
+    background:var(--chip);border:1px solid var(--chip-line);
+    padding:3px 8px;border-radius:6px;white-space:nowrap;
+  }
+  .tag.islamic{background:#eef6ee;border-color:#cfe6d0;color:#2f6b3a;}
+  .tag.income{background:#fff5dd;border-color:#f0dca6;color:#876200;}
+  .tag.tier{background:#1614100d;border-color:#dcd5c6;color:var(--ink);}
+
+  /* ---------- Empty state ---------- */
+  .empty{
+    display:none;text-align:center;padding:60px 20px;color:var(--muted);
+  }
+  .empty.show{display:block;}
+  .empty h3{color:var(--ink);font-size:18px;margin:0 0 6px;}
+
+  footer{
+    max-width:1180px;margin:0 auto;padding:0 28px 50px;color:var(--muted);font-size:12.5px;
+  }
+  footer hr{border:none;border-top:1px solid var(--line);margin:0 0 18px;}
+  footer .legal{max-width:820px;}
+
+  .hidden{display:none !important;}
+
+  @media (max-width:640px){
+    .masthead .role{display:block;}
+    .cat-head .blurb{margin-left:0;text-align:left;}
+    .grid{grid-template-columns:1fr;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none !important;scroll-behavior:auto;}
+  }
+  @media print{
+    .controls{display:none;}
+    .card:hover{transform:none;box-shadow:none;}
+    body{background:#fff;}
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <div class="brand">
+      <span class="wordmark">Maybank</span>
+      <span class="sep">/</span>
+      <span class="role">Product Catalogue — Relationship Manager Reference</span>
+    </div>
+    <p class="note">A consolidated view of Maybank's product range across consumer, wealth, business and corporate banking — written for RMs to brief and discuss with customers. <strong>For information only.</strong> No applications or journeys are started from this page.</p>
+  </div>
+</header>
+
+<div class="controls">
+  <div class="controls-inner">
+    <div class="searchrow">
+      <div class="search">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
+        <input id="search" type="search" placeholder="Search products, e.g. cashback, Islamic, trade finance, ASB…" aria-label="Search products">
+      </div>
+      <span class="count" id="count"></span>
+    </div>
+    <div class="pills" id="pills" role="group" aria-label="Filter by category">
+      <button class="pill" data-cat="all" aria-pressed="true">All</button>
+      <button class="pill" data-cat="everyday" aria-pressed="false">Everyday Banking</button>
+      <button class="pill" data-cat="cards" aria-pressed="false">Cards</button>
+      <button class="pill" data-cat="loans" aria-pressed="false">Loans &amp; Financing</button>
+      <button class="pill" data-cat="wealth" aria-pressed="false">Wealth &amp; Investments</button>
+      <button class="pill" data-cat="insurance" aria-pressed="false">Insurance &amp; Takaful</button>
+      <button class="pill" data-cat="affluent" aria-pressed="false">Affluent &amp; Wealth</button>
+      <button class="pill" data-cat="business" aria-pressed="false">Business &amp; SME</button>
+      <button class="pill" data-cat="global" aria-pressed="false">Global Banking</button>
+      <button class="pill" data-cat="ib" aria-pressed="false">Investment Banking</button>
+    </div>
+  </div>
+</div>
+
+<main id="catalogue">
+
+  <!-- 1. EVERYDAY BANKING -->
+  <section class="cat" data-cat="everyday">
+    <div class="cat-head">
+      <span class="idx">01</span>
+      <h2>Everyday Banking &amp; Savings</h2>
+      <span class="blurb">Day-to-day current and savings accounts, digital wallets, deposits and children's accounts.</span>
+    </div>
+    <div class="group">
+      <div class="grid">
+
+        <article class="card">
+          <span class="eyebrow">Digital Account</span>
+          <h4>MAE Account</h4>
+          <p class="desc">Digital-first account opened and run entirely through the MAE app — the entry point for everyday banking.</p>
+          <ul><li>Full M2U features: view accounts, transfers, bill payments</li><li>MAE debit card with better FX rates locally and abroad</li><li>Lifestyle tools — Expenses, Tabung, exclusive promos</li></ul>
+          <div class="tags"><span class="tag">Conventional</span><span class="tag">Digital / app-based</span></div>
+        </article>
+
+        <article class="card">
+          <span class="eyebrow">Goal Savings</span>
+          <h4>MAE Tabung</h4>
+          <p class="desc">Goal-based savings pots inside MAE to help customers save toward specific targets.</p>
+          <ul><li>Up to 10 individual Tabungs from as little as RM10</li><li>Group Tabung with up to 4 family or friends</li><li>Boosters: spare-change round-ups and auto-deduction</li></ul>
+          <div class="tags"><span class="tag">From RM10</span><span class="tag">Digital / app-based</span></div>
+        </article>
+
+        <article class="card">
+          <span class="eyebrow">Prize Savings</span>
+          <h4>Zest-i Account</h4>
+          <p class="desc">Shariah-compliant savings account with year-round prize draws on top of savings.</p>
+          <ul><li>Chances to win prizes worth up to RM5 million all year</li><li>Grand prizes include cash, property, car and digital gold</li><li>Min. placement RM50 when opened via Maybank2u online</li></ul>
+          <div class="tags"><span class="tag islamic">Islamic</span><span class="tag">Prize draws</span></div>
+        </article>
+
+        <article class="card">
+          <span class="eyebrow">Premium Current</span>
+          <h4>M2U.Premier Account</h4>
+          <p class="desc">Interest-bearing account with daily-calculated, monthly-credited returns and a cheque facility.</p>
+          <ul><li>Split-tiered interest credited monthly</li><li>5% bonus interest with avg. balance from RM5,000</li><li>Cheque facility included · min. deposit RM500</li></ul>
+          <div class="tags"><span class="tag">Conventional</span></div>
+        </article>
+
+        <article class="card">
+          <span class="eyebrow">Children's Account</span>
+          <h4>Yippie / Yippie-i Savings</h4>
+          <p class="desc">Savings account for children under 18, with attractive rates and free protection.</p>
+          <ul><li>Opens in under 10 minutes via the MAE app</li><li>Free PA / Takaful coverage up to RM100,000</li><li>For existing Maybank account holders with a child</li></ul>
+          <div class="tags"><span class="tag">Conventional &amp; Islamic</span><span class="tag">Under-18</span></div>
+        </article>
+
+        <article class="card">
+          <span class="eyebrow">Savings</span>
+          <h4>Maybank2u Savers / Savers-i</h4>
+          <p class="desc">Everyday online savings account with tiered returns and full online transaction access.</p>
+          <ul><li>Split-tiered interest/profit credited monthly</li><li>Cashless shopping with Maybank Debit Card</li><li>Min. deposit RM250</li></ul>
+          <div class="tags"><span class="tag">Conventional &amp; Islamic</span></div>
+        </article>
+
+        <article class="card">
+          <span class="eyebrow">Premium Savings</span>
+          <h4>Premier 1 Account</h4>
+          <p class="desc">Higher-tier savings with bundled personal-accident protection.</p>
+          <ul><li>Split-tiered interest credited monthly</li><li>Free PA cover up to RM50,000</li><li>Accident-related medical cover up to RM3,000</li></ul>
+          <div class="tags"><span class="tag">Conventional</span><span class="tag tier">Privilege gateway</span></div>
+        </article>
+
+        <article class="card">
+          <span class="eyebrow">Premium Savings</span>
+          <h4>Premier Mudharabah Account-i</h4>
+          <p class="desc">Islamic profit-sharing account with potential for higher indicative returns.</p>
+          <ul><li>Profit shared between customer and Bank by agreed ratio</li><li>Access to Priority and Private Banking (subject to eligibility)</li></ul>
+          <div class="tags"><span class="tag islamic">Islamic</span><span class="tag tier">Privilege gateway</span></div>
+        </article>
+
+        <article class="card">
+          <span class="eyebrow">Basic Savings</span>
+          <h4>Kawanku Savings Account</h4>
+          <p class="desc">Entry-level savings account with a very low minimum balance.</p>
+          <ul><li>Maintain the account with as little as RM1</li><li>Tiered interest credited half-yearly (Jun &amp; Dec)</li></ul>
+          <div class="tags"><span class="tag">Conventional</span></div>
+        </article>
+
+        <article class="card">
+          <span class="eyebrow">Basic Savings</span>
+          <h4>Savings Account-i</h4>
+          <p class="desc">Shariah savings based on Commodity Murabahah (cost-plus-sale).</p>
+          <ul><li>Tiered profit rates calculated daily</li><li>Profit credited half-yearly (Jun &amp; Dec)</li></ul>
+          <div class="tags"><span class="tag islamic">Islamic</span></div>
+        </article>
+
+        <article class="card">
+          <span class="eyebrow">Wealth Account</span>
+          <h4>Private Banking Account / -i</h4>
+          <p class="desc">Top-tier transactional account linked to Premier Wealth services.</p>
+          <ul><li>Potential for higher indicative interest/profit rates</li><li>Free PA cover up to RM50,000, medical up to RM3,000</li><li>Access to Maybank Premier Wealth Centres nationwide</li></ul>
+          <div class="tags"><span class="tag">Conventional &amp; Islamic</span><span class="tag tier">Private gateway</span></div>
+        </article>
+
+        <article class="card">
+          <span class="eyebrow">Term Deposit</span>
+          <h4>Maybank eFixed Deposit / -i</h4>
+          <p class="desc">Fixed deposit opened and managed in real time via app and Maybank2u.</p>
+          <ul><li>Board rate around 2.85% p.a. for 12 months</li><li>Higher rates during promotional campaign periods</li><li>Low minimum placement of RM1,000</li></ul>
+          <div class="tags"><span class="tag">Conventional &amp; Islamic</span></div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. CARDS -->
+  <section class="cat" data-cat="cards">
+    <div class="cat-head">
+      <span class="idx">02</span>
+      <h2>Cards</h2>
+      <span class="blurb">Credit and charge cards across travel, cashback, co-brand, Islamic and sustainability — plus card balance programmes.</span>
+    </div>
+
+    <div class="group">
+      <h3>Premium &amp; Travel</h3>
+      <div class="grid">
+        <article class="card">
+          <span class="eyebrow">Premium</span>
+          <h4>Maybank Visa Infinite</h4>
+          <p class="desc">Top-tier travel card with global lounge and golf access.</p>
+          <ul><li>Plaza Premium Lounge and golf club access worldwide</li></ul>
+          <div class="tags"><span class="tag income">Income RM100k+</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Premium · Air Miles</span>
+          <h4>Maybank World Mastercard</h4>
+          <p class="desc">Air-miles card for frequent flyers with travel protection.</p>
+          <ul><li>Treats Air Miles that never expire, convert to flights</li><li>Worldwide golf privileges and lounge access</li></ul>
+          <div class="tags"><span class="tag income">Income RM100k+</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Premium · Air Miles</span>
+          <h4>Maybank 2 Cards Premier Reserve American Express</h4>
+          <p class="desc">Twin-card set with one of the fastest air-miles conversion rates.</p>
+          <ul><li>7,000 points = 1,000 Enrich / KrisFlyer / Asia Miles</li></ul>
+          <div class="tags"><span class="tag income">Income RM100k+</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Premium · Lifestyle</span>
+          <h4>Maybank Manchester United Visa Infinite</h4>
+          <p class="desc">Premium club-branded card with bespoke fan experiences.</p>
+          <ul><li>VIP Old Trafford trips and private stadium tours</li></ul>
+          <div class="tags"><span class="tag income">Income RM100k+</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Premium</span>
+          <h4>Maybank Visa Platinum / Mastercard Platinum</h4>
+          <p class="desc">Worldwide-recognised platinum cards with strong everyday service.</p>
+          <ul><li>Global acceptance and platinum-tier privileges</li></ul>
+          <div class="tags"><span class="tag income">Income RM60k+</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Air Miles</span>
+          <h4>Singapore Airlines KrisFlyer American Express Platinum</h4>
+          <p class="desc">For SIA loyalists earning KrisFlyer miles on every spend.</p>
+          <ul><li>1 KrisFlyer mile from as low as RM1 on SIA, Scoot, KrisShop</li></ul>
+          <div class="tags"><span class="tag income">Income RM60k+</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Rewards</span>
+          <h4>American Express Platinum Credit Card</h4>
+          <p class="desc">Accelerated rewards on everyday lifestyle categories.</p>
+          <ul><li>5x Membership Rewards on groceries, telco and more</li></ul>
+          <div class="tags"><span class="tag income">Income RM60k+</span></div>
+        </article>
+      </div>
+    </div>
+
+    <div class="group">
+      <h3>Cashback &amp; Everyday</h3>
+      <div class="grid">
+        <article class="card">
+          <span class="eyebrow">Cashback</span>
+          <h4>Maybank Visa Signature</h4>
+          <p class="desc">Strong everyday cashback on petrol and groceries.</p>
+          <ul><li>5% cashback daily on petrol &amp; groceries (cap RM88/mo)</li></ul>
+          <div class="tags"><span class="tag income">Income RM70k+</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Cashback</span>
+          <h4>Maybank 2 Platinum Cards</h4>
+          <p class="desc">Twin-card combo geared to weekend spending.</p>
+          <ul><li>5% weekend cashback on the Amex card</li></ul>
+          <div class="tags"><span class="tag income">Income RM60k+</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Cashback</span>
+          <h4>American Express Cash Back Gold Credit Card</h4>
+          <p class="desc">Simple, uncapped local cashback with no minimum spend.</p>
+          <ul><li>1% cashback on local spend, no minimum, no rebate limit</li></ul>
+          <div class="tags"><span class="tag income">Income RM30k+</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Everyday</span>
+          <h4>Maybank Visa Gold / Mastercard Gold</h4>
+          <p class="desc">Step-up gold cards with higher limits and added privileges.</p>
+          <ul><li>Higher credit limit than classic tiers</li></ul>
+          <div class="tags"><span class="tag income">Income RM30k+</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Fuel · Rewards</span>
+          <h4>PETRONAS Maybank Visa Platinum / Gold</h4>
+          <p class="desc">Fuel-focused cards earning accelerated TreatsPoints.</p>
+          <ul><li>Up to 8x TreatsPoints on weekend petrol &amp; groceries</li></ul>
+          <div class="tags"><span class="tag income">Income RM30k–60k</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Cashback · Lifestyle</span>
+          <h4>Maybank FC Barcelona Visa Signature</h4>
+          <p class="desc">Club-branded card with all-year flat cashback.</p>
+          <ul><li>1% cashback on most purchases (cap RM50/mo)</li></ul>
+          <div class="tags"><span class="tag income">Income RM48k+</span></div>
+        </article>
+      </div>
+    </div>
+
+    <div class="group">
+      <h3>Co-brand &amp; Lifestyle</h3>
+      <div class="grid">
+        <article class="card">
+          <span class="eyebrow">E-commerce</span>
+          <h4>Maybank Shopee Visa Platinum</h4>
+          <p class="desc">Built for online shoppers earning Shopee Coins.</p>
+          <ul><li>Up to 5x Shopee Coins on Shopee, dining and contactless</li></ul>
+          <div class="tags"><span class="tag income">Income RM24k+</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Rideshare</span>
+          <h4>Maybank Grab Mastercard Platinum</h4>
+          <p class="desc">Rewards everyday Grab usage.</p>
+          <ul><li>Earn GrabRewards points on Grab spend</li></ul>
+          <div class="tags"><span class="tag income">Income RM24k+</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Lifestyle</span>
+          <h4>Maybank Manchester United Visa Card</h4>
+          <p class="desc">Entry-level club card for fans.</p>
+          <ul><li>10% discount at the United Online Megastore</li></ul>
+          <div class="tags"><span class="tag income">Income RM30k+</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Air Miles</span>
+          <h4>Singapore Airlines KrisFlyer Amex Gold</h4>
+          <p class="desc">Entry KrisFlyer card for travellers.</p>
+          <ul><li>1 mile per RM4 local spend; faster on SIA channels</li></ul>
+          <div class="tags"><span class="tag income">Income RM36k+</span></div>
+        </article>
+      </div>
+    </div>
+
+    <div class="group">
+      <h3>Islamic Cards (Ikhwan)</h3>
+      <div class="grid">
+        <article class="card">
+          <span class="eyebrow">Islamic · Premium</span>
+          <h4>Maybank Islamic World Mastercard Ikhwan</h4>
+          <p class="desc">Premium Shariah card for fine living and travel.</p>
+          <ul><li>8,000 Treats Air Miles = 1,000 Enrich / KrisFlyer / Asia Miles</li></ul>
+          <div class="tags"><span class="tag islamic">Islamic</span><span class="tag income">Income RM100k+</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Islamic · Premium</span>
+          <h4>Maybank Islamic Ikhwan Visa Infinite Card-i</h4>
+          <p class="desc">Top-tier Shariah travel card.</p>
+          <ul><li>Plaza Premium Lounge and golf club access worldwide</li></ul>
+          <div class="tags"><span class="tag islamic">Islamic</span><span class="tag income">Income RM100k+</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Islamic · Cashback</span>
+          <h4>Maybank Islamic Ikhwan Mastercard Platinum-i</h4>
+          <p class="desc">Community-giving card with weekend fuel and grocery rebates.</p>
+          <ul><li>5% rebate on petrol &amp; groceries every Fri &amp; Sat (cap RM50/mo)</li></ul>
+          <div class="tags"><span class="tag islamic">Islamic</span><span class="tag income">Income RM60k+</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Islamic · Fuel</span>
+          <h4>Maybank Islamic PETRONAS Ikhwan Visa Platinum-i</h4>
+          <p class="desc">Shariah fuel card with strong weekend cashback.</p>
+          <ul><li>8% cashback at PETRONAS on Saturdays &amp; Sundays</li></ul>
+          <div class="tags"><span class="tag islamic">Islamic</span><span class="tag income">Income RM60k+</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Islamic · Online</span>
+          <h4>Maybank Islamic Ikhwan Amex Platinum-i</h4>
+          <p class="desc">Shariah card rewarding online spend, with lifetime fee waiver.</p>
+          <ul><li>8% cashback monthly on online spend</li></ul>
+          <div class="tags"><span class="tag islamic">Islamic</span><span class="tag income">Income RM40k+</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Islamic · Everyday</span>
+          <h4>Maybank Islamic Ikhwan Mastercard/Visa Gold-i</h4>
+          <p class="desc">Entry Shariah gold card with fuel and grocery rebates.</p>
+          <ul><li>5% rebate on petrol &amp; groceries every Fri &amp; Sat (cap RM50/mo)</li></ul>
+          <div class="tags"><span class="tag islamic">Islamic</span><span class="tag income">Income RM24k+</span></div>
+        </article>
+      </div>
+    </div>
+
+    <div class="group">
+      <h3>Sustainability</h3>
+      <div class="grid">
+        <article class="card">
+          <span class="eyebrow">Sustainable</span>
+          <h4>Maybank myimpact Visa Signature</h4>
+          <p class="desc">Card positioned around sustainable, conscious spending.</p>
+          <ul><li>Rewards tied to sustainable spending choices</li></ul>
+          <div class="tags"><span class="tag income">Income RM36k+</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Sustainable · Islamic</span>
+          <h4>Maybank Islamic myimpact Ikhwan Mastercard Platinum-i</h4>
+          <p class="desc">Shariah version of the sustainable-spending card.</p>
+          <ul><li>Sustainable-spending rewards, Shariah-compliant</li></ul>
+          <div class="tags"><span class="tag islamic">Islamic</span><span class="tag income">Income RM36k+</span></div>
+        </article>
+      </div>
+    </div>
+
+    <div class="group">
+      <h3>Card Balance &amp; Cash Programmes</h3>
+      <div class="grid">
+        <article class="card">
+          <span class="eyebrow">Instalment</span>
+          <h4>Maybank EzyPay Plus / -i</h4>
+          <p class="desc">Converts larger card purchases into fixed monthly instalments.</p>
+          <ul><li>Purchases above RM500 into 6/12/18/24-month plans</li><li>Rate around 9% p.a. · up to RM30,000 · no fees</li></ul>
+          <div class="tags"><span class="tag">Conventional &amp; Islamic</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Cash</span>
+          <h4>Maybank EzyCash / -i</h4>
+          <p class="desc">Draws cash against the card's available limit at a low board rate.</p>
+          <ul><li>Board rate around 2.85% p.a. for 12 months</li><li>Minimum amount RM2,000</li></ul>
+          <div class="tags"><span class="tag">Conventional &amp; Islamic</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Balance Transfer</span>
+          <h4>Maybank Balance Transfer / -i</h4>
+          <p class="desc">Moves balances from other cards onto a structured low-rate plan.</p>
+          <ul><li>0% plans available with an upfront fee</li><li>For Maybank credit card customers · from RM1,000</li></ul>
+          <div class="tags"><span class="tag">Conventional &amp; Islamic</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Limit Management</span>
+          <h4>Credit Limit Increase</h4>
+          <p class="desc">Online request to raise an existing card credit limit.</p>
+          <ul><li>Apply for a higher limit without a branch visit</li></ul>
+          <div class="tags"><span class="tag">Servicing</span></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. LOANS & FINANCING -->
+  <section class="cat" data-cat="loans">
+    <div class="cat-head">
+      <span class="idx">03</span>
+      <h2>Loans &amp; Financing</h2>
+      <span class="blurb">Personal financing for cash needs, investment and home ownership.</span>
+    </div>
+    <div class="group">
+      <div class="grid">
+        <article class="card">
+          <span class="eyebrow">Investment Financing</span>
+          <h4>Maybank ASB Financing / -i</h4>
+          <p class="desc">Financing to invest in ASB/ASNB units while earning yearly dividends.</p>
+          <ul><li>Financing up to RM200,000</li><li>Rate from 4.45% p.a., repayments from ~RM47/mo</li><li>Lower rates when applied via M2U / MAE app</li></ul>
+          <div class="tags"><span class="tag">Conventional &amp; Islamic</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Personal Loan</span>
+          <h4>Maybank Personal Loan</h4>
+          <p class="desc">Unsecured personal cash loan with fast approval.</p>
+          <ul><li>RM5,000–RM100,000 over 2–6 years</li><li>Rate from 6.5% p.a., repayments from ~RM102.78</li><li>Approval within 48 hours · no processing fee</li></ul>
+          <div class="tags"><span class="tag">Conventional</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Personal Financing</span>
+          <h4>Maybank Personal Financing-i</h4>
+          <p class="desc">Shariah-compliant version of the personal cash facility.</p>
+          <ul><li>RM5,000–RM100,000 over 2–6 years</li><li>Rate from 6.5% p.a. · approval within 48 hours</li><li>Instant approval for selected salaried customers</li></ul>
+          <div class="tags"><span class="tag islamic">Islamic</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Home Financing</span>
+          <h4>Home2u</h4>
+          <p class="desc">Property search and home-financing platform with pre-filled applications.</p>
+          <ul><li>Browse nationwide property listings in one place</li><li>Approval in seconds for salary-credited customers</li><li>For Malaysians aged 18–65</li></ul>
+          <div class="tags"><span class="tag">Conventional &amp; Islamic</span></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. WEALTH & INVESTMENTS -->
+  <section class="cat" data-cat="wealth">
+    <div class="cat-head">
+      <span class="idx">04</span>
+      <h2>Wealth &amp; Investments</h2>
+      <span class="blurb">Self-directed and managed investing — equities, funds, gold and goal-based portfolios.</span>
+    </div>
+    <div class="group">
+      <div class="grid">
+        <article class="card">
+          <span class="eyebrow">Equities</span>
+          <h4>Maybank Share Trading</h4>
+          <p class="desc">Online share-trading account for buying and selling Bursa-listed equities.</p>
+          <ul><li>Account opening in about 3 minutes online</li><li>RM10 CDS account opening fee · ages 18–65</li></ul>
+          <div class="tags"><span class="tag">Self-directed</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Funds</span>
+          <h4>Maybank Unit Trust</h4>
+          <p class="desc">Professionally managed funds for regular, diversified investing.</p>
+          <ul><li>Start from RM100 per month</li><li>Sales charges from as low as 1%</li><li>Online account opening, no branch visit needed</li></ul>
+          <div class="tags"><span class="tag">Managed</span><span class="tag islamic">Shariah funds available</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Goal Investing</span>
+          <h4>Maybank Goal-Based Investment</h4>
+          <p class="desc">Beginner-friendly investing tied to specific life goals.</p>
+          <ul><li>Start from as low as RM200, no lock-in period</li><li>No withdrawal fees · professionally managed</li></ul>
+          <div class="tags"><span class="tag">Managed</span><span class="tag islamic">Shariah funds available</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Gold</span>
+          <h4>Maybank Islamic Gold Account-i (MIGA-i)</h4>
+          <p class="desc">Shariah physical-gold-backed account for buying and investing in gold.</p>
+          <ul><li>Real-time pricing with low price spread</li><li>Profit alerts and auto buy/sell orders · from RM10</li></ul>
+          <div class="tags"><span class="tag islamic">Islamic</span><span class="tag">From RM10</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Prize Savings</span>
+          <h4>Zest-i Account</h4>
+          <p class="desc">Islamic savings-and-prize account that doubles as an entry-level investment placement.</p>
+          <ul><li>Prize draws all year from a min. placement of RM200</li><li>Min. placement RM50 to open via Maybank2u online</li></ul>
+          <div class="tags"><span class="tag islamic">Islamic</span><span class="tag">Prize draws</span></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. INSURANCE & TAKAFUL -->
+  <section class="cat" data-cat="insurance">
+    <div class="cat-head">
+      <span class="idx">05</span>
+      <h2>Insurance &amp; Takaful</h2>
+      <span class="blurb">Etiqa-underwritten protection plans available through Maybank.</span>
+    </div>
+    <div class="group">
+      <div class="grid">
+        <article class="card">
+          <span class="eyebrow">Motor</span>
+          <h4>Car Insurance / Takaful Plan</h4>
+          <p class="desc">Motor cover with online discounts and roadside support.</p>
+          <ul><li>10% off when signing up or renewing online</li><li>30% cash rebate with the "Drive Less, Save More" add-on</li><li>24/7 emergency roadside assistance</li></ul>
+          <div class="tags"><span class="tag">Insurance &amp; Takaful</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Travel</span>
+          <h4>TripCare 360 Insurance / Takaful Plan</h4>
+          <p class="desc">Travel protection for overseas trips with cashless medical care.</p>
+          <ul><li>25% off when signing up online</li><li>Cashless overseas medical care</li><li>Cover up to RM5,000 for baggage and travel documents</li></ul>
+          <div class="tags"><span class="tag">Insurance &amp; Takaful</span></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. AFFLUENT & WEALTH -->
+  <section class="cat" data-cat="affluent">
+    <div class="cat-head">
+      <span class="idx">06</span>
+      <h2>Affluent &amp; Wealth Banking</h2>
+      <span class="blurb">Relationship-managed propositions for mass-affluent, premier and high-net-worth clients.</span>
+    </div>
+    <div class="group">
+      <div class="grid">
+        <article class="card">
+          <span class="eyebrow">Mass Affluent</span>
+          <h4>Maybank Privilege</h4>
+          <p class="desc">Wealth proposition for customers of a defined financial standing, with rewards and preferential returns.</p>
+          <ul><li>Eligibility: RM50k–250k in deposits/investments, or RM250k–1M in financing + investments</li><li>Preferential rates, TreatsPoints and curated rewards</li><li>Guidance from a Personal Financial Advisor</li></ul>
+          <div class="tags"><span class="tag tier">Tier: Privilege</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Premier Wealth</span>
+          <h4>Maybank Premier</h4>
+          <p class="desc">Premier wealth tier with a dedicated relationship manager and lifestyle privileges.</p>
+          <ul><li>Dedicated RM and priority for credit facilities</li><li>Premier Centres, Lounges, Premier debit &amp; 2 Cards, concierge</li><li>Market insights, Wealth Yearbook and exclusive events</li><li>Regional recognition across Malaysia, Singapore &amp; Indonesia</li></ul>
+          <div class="tags"><span class="tag tier">Tier: Premier</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Private Banking</span>
+          <h4>Maybank Private</h4>
+          <p class="desc">Top-tier private banking for high-net-worth clients with bespoke wealth solutions.</p>
+          <ul><li>Private Banking Account / -i with elevated indicative rates</li><li>Access to specialised wealth structuring and advisory</li><li>Premier Wealth services and centres nationwide</li></ul>
+          <div class="tags"><span class="tag tier">Tier: Private</span></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. BUSINESS & SME -->
+  <section class="cat" data-cat="business">
+    <div class="cat-head">
+      <span class="idx">07</span>
+      <h2>Business &amp; SME Banking</h2>
+      <span class="blurb">Accounts, financing, trade and digital tools for SMEs and growing businesses.</span>
+    </div>
+    <div class="group">
+      <div class="grid">
+        <article class="card">
+          <span class="eyebrow">Operating Account</span>
+          <h4>Business Current Accounts</h4>
+          <p class="desc">Day-to-day operating accounts for SMEs through to corporates.</p>
+          <ul><li>All-in-one accounts to support operations and growth</li><li>Islamic options based on Commodity Murabahah</li><li>Online onboarding for partnerships and Sdn Bhd companies</li></ul>
+          <div class="tags"><span class="tag">Conventional &amp; Islamic</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Investment Account</span>
+          <h4>Business Investment Account-i</h4>
+          <p class="desc">Shariah investment accounts that reward SME and Business Banking customers.</p>
+          <ul><li>Based on the principle of Mudharabah</li><li>Potential for higher returns on business balances</li></ul>
+          <div class="tags"><span class="tag islamic">Islamic</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Financing</span>
+          <h4>SME Digital Financing</h4>
+          <p class="desc">Fast, mostly online working-capital financing for smaller businesses.</p>
+          <ul><li>Instant online financing options</li><li>Clean (unsecured) facilities up to RM1.5 million</li><li>Conventional and Islamic structures available</li></ul>
+          <div class="tags"><span class="tag">Conventional &amp; Islamic</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Solution Package</span>
+          <h4>Maybank ScaleUp SME</h4>
+          <p class="desc">Staged solution packages tailored to Micro, Small and Medium enterprises.</p>
+          <ul><li>Bundles financing, sustainability, tools and advisory</li><li>Designed for each stage of business growth</li></ul>
+          <div class="tags"><span class="tag">SME programme</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Financing</span>
+          <h4>Working Capital &amp; Business Property Financing</h4>
+          <p class="desc">Flexible financing to fund operations, expansion and business premises.</p>
+          <ul><li>Working capital, property and trade financing lines</li><li>Sized to the business's capacity and needs</li></ul>
+          <div class="tags"><span class="tag">Conventional &amp; Islamic</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Trade</span>
+          <h4>Trade Financing</h4>
+          <p class="desc">Products and services that facilitate domestic and international trade.</p>
+          <ul><li>Import and export financing solutions</li><li>Eases cash flow with potential trade-cost savings</li></ul>
+          <div class="tags"><span class="tag">Trade &amp; supply chain</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Digital Platform</span>
+          <h4>Maybank2u Biz</h4>
+          <p class="desc">Online business banking platform to run a company's day-to-day finances.</p>
+          <ul><li>Payments, payroll and bulk payments (file or entry)</li><li>Statutory payments — EPF, LHDN, SOCSO, EIS</li><li>Statements, advices and transaction history</li></ul>
+          <div class="tags"><span class="tag">Servicing platform</span></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. GLOBAL BANKING -->
+  <section class="cat" data-cat="global">
+    <div class="cat-head">
+      <span class="idx">08</span>
+      <h2>Global Banking &amp; Transaction Banking</h2>
+      <span class="blurb">Corporate and institutional solutions across cash, trade, markets and the regional M2E platform.</span>
+    </div>
+    <div class="group">
+      <div class="grid">
+        <article class="card">
+          <span class="eyebrow">Digital Platform</span>
+          <h4>Maybank2E (M2E)</h4>
+          <p class="desc">Integrated regional business banking platform bringing core corporate services into one login.</p>
+          <ul><li>Cash management, trade finance and FX in a single platform</li><li>Web and M2E Biz app; multi-country, -currency, -lingual</li><li>Lock FX rates across 20+ currencies; view positions by market</li></ul>
+          <div class="tags"><span class="tag">Corporate / SME</span><span class="tag">Regional</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Transaction Banking</span>
+          <h4>Cash Management (Regional Cash)</h4>
+          <p class="desc">Web-enabled cash management across ASEAN and Greater China.</p>
+          <ul><li>Information, payables and receivables management</li><li>Consolidated dashboard of cash positions, incl. non-Maybank accounts</li><li>Real-time, batch or scheduled payments</li></ul>
+          <div class="tags"><span class="tag">Corporate</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Transaction Banking</span>
+          <h4>Trade Finance &amp; Supply Chain</h4>
+          <p class="desc">Cross-border, end-to-end trade and supply-chain solutions.</p>
+          <ul><li>Import, export and supply-chain financing</li><li>Presence across 10 ASEAN countries</li></ul>
+          <div class="tags"><span class="tag">Corporate</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Global Markets</span>
+          <h4>Global Markets</h4>
+          <p class="desc">Treasury and markets solutions for FX, rates and hedging needs.</p>
+          <ul><li>Foreign exchange, rates and derivatives</li><li>Risk-management and hedging for corporate exposures</li></ul>
+          <div class="tags"><span class="tag">Corporate / Institutional</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Corporate Banking</span>
+          <h4>Corporate Banking</h4>
+          <p class="desc">Tailored financial solutions for organisational needs.</p>
+          <ul><li>Loans and financing structured to the organisation</li><li>Credit and insurance solutions</li></ul>
+          <div class="tags"><span class="tag">Corporate</span></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. INVESTMENT BANKING -->
+  <section class="cat" data-cat="ib">
+    <div class="cat-head">
+      <span class="idx">09</span>
+      <h2>Investment Banking</h2>
+      <span class="blurb">Maybank Investment Banking Group (Maybank IB) — advisory, capital markets, derivatives, broking and research.</span>
+    </div>
+    <div class="group">
+      <div class="grid">
+        <article class="card">
+          <span class="eyebrow">Advisory</span>
+          <h4>Corporate Finance &amp; M&amp;A Advisory</h4>
+          <p class="desc">End-to-end advisory across mergers, acquisitions and corporate transactions.</p>
+          <ul><li>Origination, structuring and execution of M&amp;A</li><li>Fund raising, restructuring and privatisation</li></ul>
+          <div class="tags"><span class="tag">Corporate / Institutional</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Advisory</span>
+          <h4>Strategic Advisory</h4>
+          <p class="desc">Specialist advisory for project financing and policy work.</p>
+          <ul><li>Mainly for government and infrastructure entities</li></ul>
+          <div class="tags"><span class="tag">Public / Infrastructure</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Capital Markets</span>
+          <h4>Debt Capital Markets</h4>
+          <p class="desc">Holistic conventional and Islamic debt funding solutions.</p>
+          <ul><li>Origination, execution and distribution of bonds &amp; sukuk</li><li>Syndicated credit and underwriting of issues</li></ul>
+          <div class="tags"><span class="tag">Conventional &amp; Islamic</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Capital Markets</span>
+          <h4>Equity Capital Markets</h4>
+          <p class="desc">Equity fund-raising for corporate clients.</p>
+          <ul><li>IPOs and public/private equity transactions</li><li>Origination, syndication, marketing and distribution</li></ul>
+          <div class="tags"><span class="tag">Corporate</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Derivatives</span>
+          <h4>Equity &amp; Commodity Derivatives / Structured Products</h4>
+          <p class="desc">Customised investment and risk-mitigation products.</p>
+          <ul><li>Notes, equity-linked investment notes, structured warrants</li><li>Exchange-traded and OTC exposure to equity &amp; commodity markets</li></ul>
+          <div class="tags"><span class="tag">Retail / Corporate / Institutional</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Broking</span>
+          <h4>Securities Broking</h4>
+          <p class="desc">Retail and institutional equities broking across the region.</p>
+          <ul><li>Institutional broking and private client services</li><li>Remisier services and multiple ways to trade</li></ul>
+          <div class="tags"><span class="tag">Retail / Institutional</span></div>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Research</span>
+          <h4>Investment Research</h4>
+          <p class="desc">In-house research covering 11 markets across ASEAN and beyond.</p>
+          <ul><li>Company, economics, sector, strategy, technical &amp; macro reports</li><li>Delivered via Maybank Trade</li></ul>
+          <div class="tags"><span class="tag">Insights</span></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <div class="empty" id="empty">
+    <h3>No products match your search</h3>
+    <p>Try a different term, or clear the search to see the full catalogue.</p>
+  </div>
+
+</main>
+
+<footer>
+  <hr>
+  <p class="legal">Internal reference for Maybank Relationship Managers. Product names, features, indicative rates and eligibility are summarised for discussion purposes and may change — always confirm current terms, fees and conditions against official product disclosure sheets before advising a customer. This page is for information only and does not initiate any application.</p>
+</footer>
+
+<script>
+(function(){
+  var search   = document.getElementById('search');
+  var pills    = document.getElementById('pills');
+  var countEl  = document.getElementById('count');
+  var emptyEl  = document.getElementById('empty');
+  var sections = Array.prototype.slice.call(document.querySelectorAll('.cat'));
+  var cards    = Array.prototype.slice.call(document.querySelectorAll('.card'));
+  var activeCat = 'all';
+
+  // Pre-index each card's searchable text once.
+  cards.forEach(function(c){ c._text = c.textContent.toLowerCase(); });
+
+  function apply(){
+    var q = search.value.trim().toLowerCase();
+    var visible = 0;
+
+    sections.forEach(function(sec){
+      var catMatch = (activeCat === 'all' || sec.getAttribute('data-cat') === activeCat);
+      var anyInSection = false;
+
+      // cards within this section
+      Array.prototype.forEach.call(sec.querySelectorAll('.card'), function(card){
+        var show = catMatch && (q === '' || card._text.indexOf(q) !== -1);
+        card.classList.toggle('hidden', !show);
+        if(show){ anyInSection = true; visible++; }
+      });
+
+      // hide empty groups (subgroup blocks)
+      Array.prototype.forEach.call(sec.querySelectorAll('.group'), function(grp){
+        var anyCard = grp.querySelector('.card:not(.hidden)');
+        grp.classList.toggle('hidden', !anyCard);
+      });
+
+      sec.classList.toggle('hidden', !anyInSection);
+    });
+
+    emptyEl.classList.toggle('show', visible === 0);
+    countEl.innerHTML = '<b>' + visible + '</b> product' + (visible === 1 ? '' : 's') + ' shown';
+  }
+
+  search.addEventListener('input', apply);
+
+  pills.addEventListener('click', function(e){
+    var btn = e.target.closest('.pill');
+    if(!btn) return;
+    activeCat = btn.getAttribute('data-cat');
+    Array.prototype.forEach.call(pills.querySelectorAll('.pill'), function(p){
+      p.setAttribute('aria-pressed', p === btn ? 'true' : 'false');
+    });
+    apply();
+    if(activeCat !== 'all'){
+      var target = document.querySelector('.cat[data-cat="'+activeCat+'"]');
+      if(target){ window.scrollTo({ top: target.offsetTop - 140, behavior: 'smooth' }); }
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  });
+
+  apply();
+})();
+</script>
+
+</body>
+</html>
